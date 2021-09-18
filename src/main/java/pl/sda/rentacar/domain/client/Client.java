@@ -16,7 +16,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor
 @Data
 @Table(name = "clients")
-class Client {
+public class Client {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
