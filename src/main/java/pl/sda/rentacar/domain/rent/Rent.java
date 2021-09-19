@@ -41,4 +41,6 @@ public class Rent {
     private BigDecimal charge;
 
     private String comment;
+
+    private RentStatus rentStatus;
 }
