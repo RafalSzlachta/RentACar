@@ -1,6 +1,5 @@
 package pl.sda.rentacar.domain.car;
 
-import jdk.jshell.Snippet;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,7 +24,7 @@ public class Car {
     private String make;
     private String model;
     private Integer productionYear;
-    private RentStatus status;
+    private CarStatus status;
     private BigDecimal pricePerDay;
     private BodyType bodyType;
 }
