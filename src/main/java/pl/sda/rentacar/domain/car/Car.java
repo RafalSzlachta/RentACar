@@ -15,7 +15,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Table (name= "Cars")
+@Table(name = "Cars")
 
 public class Car {
 
@@ -28,4 +28,5 @@ public class Car {
     private Integer productionYear;
     private Snippet.Status status;
     private BigDecimal pricePerDay;
+    private BodyType bodyType;
 }
