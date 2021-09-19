@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import java.math.BigDecimal;
+
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -15,5 +17,5 @@ public class Income {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    private Integer revenue;
+    private BigDecimal revenue;
 }

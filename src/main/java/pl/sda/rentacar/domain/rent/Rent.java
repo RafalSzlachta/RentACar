@@ -3,10 +3,12 @@ package pl.sda.rentacar.domain.rent;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.sda.rentacar.domain.car.Car;
 import pl.sda.rentacar.domain.client.Client;
 import pl.sda.rentacar.domain.employee.Employee;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -36,7 +38,7 @@ public class Rent {
 
     private LocalDate returnDate;
 
-    private Integer charge;
+    private BigDecimal charge;
 
     private String comment;
 }
