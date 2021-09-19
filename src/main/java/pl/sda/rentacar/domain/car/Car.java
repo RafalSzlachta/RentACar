@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import java.math.BigDecimal;
+
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -20,10 +22,10 @@ public class Car {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
-    private String producer;
+    private String make;
     private String model;
     private String bodytype;
-    private Integer yearOfProduce;
+    private Integer productionYear;
     private Snippet.Status status;
-    private Integer pricePerDay;
+    private BigDecimal pricePerDay;
 }
