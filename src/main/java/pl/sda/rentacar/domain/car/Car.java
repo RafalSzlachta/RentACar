@@ -24,9 +24,8 @@ public class Car {
     private Long id;
     private String make;
     private String model;
-    private String bodytype;
     private Integer productionYear;
-    private Snippet.Status status;
+    private RentStatus status;
     private BigDecimal pricePerDay;
     private BodyType bodyType;
 }
