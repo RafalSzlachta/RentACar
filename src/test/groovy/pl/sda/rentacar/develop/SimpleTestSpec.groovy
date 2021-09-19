@@ -2,6 +2,7 @@ package pl.sda.rentacar.develop
 
 import spock.lang.Specification
 
+//TODO remove when tests will be added with notice number RAC-29
 class SimpleTestSpec extends Specification{
 
     def "ShouldReturn3WhenGiven1And2"() {
