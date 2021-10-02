@@ -9,7 +9,9 @@ import pl.sda.rentacar.domain.employee.Employee;
 import javax.persistence.*;
 
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -25,8 +27,10 @@ public class Department {
     private Long id;
 
     private String address;
-    @OneToMany
-    private List<Employee> employees;
-    @OneToMany
-    private List<Car> cars;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<Employee> employees;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<Car> cars;
 }
