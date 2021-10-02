@@ -4,22 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-
 import java.math.BigDecimal;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
-@Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
-@Table(name = "Cars")
+@NoArgsConstructor
+@AllArgsConstructor
+public class CarCreateRequest {
 
-public class Car {
-
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
     private Long id;
     private String make;
     private String model;
@@ -28,4 +19,3 @@ public class Car {
     private BigDecimal pricePerDay;
     private BodyType bodyType;
 }
-
