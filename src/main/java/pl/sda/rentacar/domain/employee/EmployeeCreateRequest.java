@@ -5,25 +5,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.sda.rentacar.domain.department.Department;
 
-import javax.persistence.*;
-
-import static javax.persistence.GenerationType.IDENTITY;
-
-@Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
-@Table(name = "employees")
-public class Employee {
+@NoArgsConstructor
+@AllArgsConstructor
+public class EmployeeCreateRequest {
 
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
 
     private String firstName;
 
     private String lastName;
 
-    @ManyToOne
     private Department department;
+
 }
