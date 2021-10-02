@@ -26,4 +26,10 @@ public class Employee {
 
     @ManyToOne
     private Department department;
+
+    public Employee(String firstName, String lastName, Department department){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.department = department;
+    }
 }
