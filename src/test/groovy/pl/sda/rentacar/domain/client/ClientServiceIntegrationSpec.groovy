@@ -3,8 +3,8 @@ package pl.sda.rentacar.domain.client
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
+import spock.lang.Shared
 import spock.lang.Specification
-
 
 @ContextConfiguration
 @SpringBootTest
@@ -16,30 +16,67 @@ class ClientServiceIntegrationSpec extends Specification {
     @Autowired
     private ClientService service
 
-    def id = 1L
-    def client = new Client(
-            id,
+    def cleanup() {
+        repository.deleteAll()
+    }
+
+    @Shared
+    def client = new ClientCreateRequest(
             "Beata",
             "Kozidrak",
             "beata@kozidrak.pl",
             "222555333")
 
-    void initialRepositoryWithOneClient() {
-        repository.save(client)
+    def 'should add client'() {
+        given:
+        service.addClient(client)
+
+        when:
+        def result = repository.findAll()
+
+        then:
+        with(result.first()) {
+            id != null
+            firstName == client.firstName
+            lastName == client.lastName
+            email == client.email
+            phoneNumber == client.phoneNumber
+        }
+    }
+
+    def 'should return client by given id if exist'() {
+        given:
+        service.addClient(client)
+        def all = repository.findAll()
+        def id = all.first().id
+
+        when:
+        def result = service.getClientById(id)
+
+        then:
+        with(result) {
+            firstName == client.firstName
+            lastName == client.lastName
+            email == client.email
+            phoneNumber == client.phoneNumber
+        }
     }
 
     def 'ShouldAddTwoClientsAndFindTwoClients'() {
         given:
-        initialRepositoryWithOneClient()
         def secondClient = new ClientCreateRequest(
                 "Kamil",
                 "Durczok",
                 "kamil@durczok.pl",
                 "111444222")
+
         when:
+        service.addClient(client)
         service.addClient(secondClient)
+
         and:
         def clients = service.getALlClients()
+
         then:
         clients != null
         clients.size() == 2
@@ -51,27 +88,7 @@ class ClientServiceIntegrationSpec extends Specification {
         }
     }
 
-    def 'should return client by given id if exist'() {
-        given:
-        initialRepositoryWithOneClient()
-
-        when:
-        def result = service.getClientById(id)
-
-        then:
-        with(result) {
-            id == client.id
-            firstName == client.firstName
-            lastName == client.lastName
-            email == client.email
-            phoneNumber == client.phoneNumber
-        }
-    }
-
     def 'should throw ClientNotFoundException'() {
-        given:
-        repository.findById(_ as Long) >> Optional.empty()
-
         when:
         service.getClientById(10L)
 
@@ -82,17 +99,20 @@ class ClientServiceIntegrationSpec extends Specification {
 
     def 'should update client with given id'() {
         given:
-        initialRepositoryWithOneClient()
-
         def requestUpdate = new ClientCreateRequest(
                 "Edyta",
                 "Górniak",
                 "edyta@górniak.pl",
                 "666999666")
 
+        and:
+        service.addClient(client)
+        def id = repository.findAll().first().id
+
         when:
         service.updateClient(id, requestUpdate)
         def updatedClient = service.getClientById(id)
+
         then:
         with(updatedClient) {
             firstName == requestUpdate.firstName
@@ -104,13 +124,13 @@ class ClientServiceIntegrationSpec extends Specification {
 
     def 'should remove client with given id'() {
         given:
-        initialRepositoryWithOneClient()
+        service.addClient(client)
+        def id = repository.findAll().first().id
 
         when:
         service.removeClient(id)
-        def result = service.getALlClients()
 
         then:
-        result.isEmpty()
+        repository.findAll().isEmpty()
     }
 }
