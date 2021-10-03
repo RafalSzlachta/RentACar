@@ -14,18 +14,17 @@ public class DepartmentService {
 
     private final DepartmentRepository repository;
 
-    public void addDepartment(DepartmentCreateRequest departmentCreateRequest) {
+    public Long addDepartment(DepartmentCreateRequest departmentCreateRequest) {
         Department department = MAPPER.toDepartment(departmentCreateRequest);
-        repository.save(department);
+        return repository.save(department).getId();
     }
 
     public DepartmentSingleView getDepartmentById(Long id) {
         Department department = findDepartmentById(id);
-        DepartmentSingleView departmentSV = MAPPER.toDepartmentSingleView(department);
-        return departmentSV;
+        return MAPPER.toDepartmentSingleView(department);
     }
 
-    Department findDepartmentById(Long id) {
+    public Department findDepartmentById(Long id) {
         return repository
                 .findById(id)
                 .orElseThrow(() -> new DepartmentNotFoundException(id));
