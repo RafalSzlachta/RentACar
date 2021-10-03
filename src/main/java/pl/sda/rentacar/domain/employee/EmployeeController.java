@@ -14,7 +14,7 @@ public class EmployeeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void addEmployee(@RequestBody EmployeeCreateRequest request){
+    public void addEmployee(@RequestBody EmployeeCreateRequest request) {
         service.addEmployee(request);
     }
 
@@ -35,7 +35,7 @@ public class EmployeeController {
     }
 
     @PutMapping({"/id"})
-    public void updateEmployee(@PathVariable Long id, @RequestBody EmployeeCreateRequest request){
+    public void updateEmployee(@PathVariable Long id, @RequestBody EmployeeCreateRequest request) {
         service.updateEmployee(id, request);
     }
 }

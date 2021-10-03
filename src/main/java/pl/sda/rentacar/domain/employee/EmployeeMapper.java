@@ -7,7 +7,6 @@ import static org.mapstruct.factory.Mappers.getMapper;
 
 @Mapper
 interface EmployeeMapper {
-
     EmployeeMapper MAPPER = getMapper(EmployeeMapper.class);
 
     @Mapping(target = "id", ignore = true)
