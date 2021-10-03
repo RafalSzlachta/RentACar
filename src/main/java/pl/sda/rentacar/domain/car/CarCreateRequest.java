@@ -11,11 +11,9 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class CarCreateRequest {
 
-    private Long id;
     private String make;
     private String model;
     private Integer productionYear;
-    private CarStatus status;
     private BigDecimal pricePerDay;
     private BodyType bodyType;
 }

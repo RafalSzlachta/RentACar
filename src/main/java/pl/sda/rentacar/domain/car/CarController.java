@@ -3,9 +3,6 @@ package pl.sda.rentacar.domain.car;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import pl.sda.rentacar.domain.car.CarCreateRequest;
-import pl.sda.rentacar.domain.car.CarService;
-import pl.sda.rentacar.domain.car.CarView;
 
 import java.util.List;
 

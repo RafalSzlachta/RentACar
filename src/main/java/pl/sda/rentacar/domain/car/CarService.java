@@ -39,11 +39,9 @@ public class CarService {
 
     void updateCar(Long id, CarCreateRequest request) {
         Car car = findCarById(id);
-        car.setId(request.getId());
         car.setMake(request.getMake());
         car.setModel(request.getModel());
         car.setProductionYear(request.getProductionYear());
-        car.setStatus(request.getStatus());
         car.setPricePerDay(request.getPricePerDay());
         car.setBodyType(request.getBodyType());
         repository.save(car);
