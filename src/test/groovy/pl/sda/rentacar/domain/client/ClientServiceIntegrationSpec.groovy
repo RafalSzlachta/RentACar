@@ -62,7 +62,7 @@ class ClientServiceIntegrationSpec extends Specification {
         }
     }
 
-    def 'Should add two clients and find two clients'() {
+    def 'should add two clients and find two clients'() {
         given:
         def secondClient = new ClientCreateRequest(
                 "Kamil",

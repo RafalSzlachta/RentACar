@@ -5,10 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.sda.rentacar.domain.car.Car;
 import pl.sda.rentacar.domain.employee.Employee;
-
 import javax.persistence.*;
-
-
 import java.util.Set;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -31,5 +28,4 @@ public class Department {
 
     @OneToMany(fetch = FetchType.EAGER)
     private Set<Car> cars;
-
 }

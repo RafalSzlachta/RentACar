@@ -39,5 +39,4 @@ public class ClientController {
     public void removeClientById(@PathVariable Long id) {
         service.removeClient(id);
     }
-
 }

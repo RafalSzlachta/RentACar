@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.sda.rentacar.domain.car.Car;
 import pl.sda.rentacar.domain.employee.Employee;
-
 import java.util.Set;
 
 @Data
@@ -16,5 +15,4 @@ public class DepartmentCreateRequest {
     private String address;
     private Set<Employee> employees;
     private Set<Car> cars;
-
 }

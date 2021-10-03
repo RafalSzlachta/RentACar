@@ -11,5 +11,4 @@ public class DepartmentListView {
 
     private Long id;
     private String address;
-
 }
