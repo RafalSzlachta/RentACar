@@ -16,4 +16,5 @@ public class DepartmentSingleView {
     private String address;
     private Set<Employee> employees;
     private Set<Car> cars;
+
 }

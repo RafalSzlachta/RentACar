@@ -40,6 +40,6 @@ class DepartmentMapperSpec extends Specification {
         result.address == request.address
         result.employees == request.employees
         result.cars == request.cars
-
     }
+
 }

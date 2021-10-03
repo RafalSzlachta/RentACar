@@ -62,7 +62,7 @@ class ClientServiceIntegrationSpec extends Specification {
         }
     }
 
-    def 'ShouldAddTwoClientsAndFindTwoClients'() {
+    def 'Should add two clients and find two clients'() {
         given:
         def secondClient = new ClientCreateRequest(
                 "Kamil",
@@ -133,4 +133,5 @@ class ClientServiceIntegrationSpec extends Specification {
         then:
         repository.findAll().isEmpty()
     }
+
 }

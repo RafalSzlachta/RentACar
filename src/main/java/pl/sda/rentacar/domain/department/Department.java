@@ -9,8 +9,6 @@ import pl.sda.rentacar.domain.employee.Employee;
 import javax.persistence.*;
 
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -19,7 +17,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Table(name= "Departments")
+@Table(name = "departments")
 public class Department {
 
     @Id
@@ -33,4 +31,5 @@ public class Department {
 
     @OneToMany(fetch = FetchType.EAGER)
     private Set<Car> cars;
+
 }

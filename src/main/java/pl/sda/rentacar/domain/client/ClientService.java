@@ -49,4 +49,5 @@ public class ClientService {
     public void removeClient(Long id) {
         repository.delete(findClientById(id));
     }
+
 }
