@@ -11,7 +11,7 @@ interface EmployeeMapper {
     EmployeeMapper MAPPER = getMapper(EmployeeMapper.class);
 
     @Mapping(target = "id", ignore = true)
-
+    @Mapping(target = "department", ignore = true)
     Employee mapToEmployee(EmployeeCreateRequest request);
 
     EmployeeView mapToEmployeeView(Employee employee);

@@ -7,16 +7,14 @@ import org.springframework.transaction.annotation.Transactional
 import spock.lang.Shared
 import spock.lang.Specification
 
-@ContextConfiguration
 @SpringBootTest
-@Transactional
 class DepartmentServiceIntegrationSpec extends Specification {
 
     @Autowired
-    private final DepartmentRepository repository
+    private DepartmentRepository repository
 
     @Autowired
-    private final DepartmentService service
+    private DepartmentService service
 
     def cleanup() {
         repository.deleteAll()

@@ -2,6 +2,8 @@ package pl.sda.rentacar.domain.employee;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.sda.rentacar.domain.department.Department;
+import pl.sda.rentacar.domain.department.DepartmentService;
 
 import java.util.List;
 
@@ -12,10 +14,13 @@ import static pl.sda.rentacar.domain.employee.EmployeeMapper.MAPPER;
 @RequiredArgsConstructor
 public class EmployeeService {
 
+    private final DepartmentService departmentService;
     private final EmployeeRepository employeeRepository;
 
     public void addEmployee(EmployeeCreateRequest request){
         Employee employee = MAPPER.mapToEmployee(request);
+        Department department = departmentService.findDepartmentById(request.getDepartmentId());
+        employee.setDepartment(department);
         employeeRepository.save(employee);
     }
 
@@ -44,7 +49,8 @@ public class EmployeeService {
         Employee employee = getEmployeeById(id);
         employee.setFirstName(request.getFirstName());
         employee.setLastName(request.getLastName());
-        employee.setDepartment(request.getDepartment());
+        Department department = departmentService.findDepartmentById(request.getDepartmentId());
+        employee.setDepartment(department);
         employeeRepository.save(employee);
     }
 }

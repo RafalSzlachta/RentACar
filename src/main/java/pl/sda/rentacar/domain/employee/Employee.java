@@ -25,9 +25,10 @@ public class Employee {
     private String lastName;
 
     @ManyToOne
+    @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
-    public Employee(String firstName, String lastName, Department department){
+    public Employee(String firstName, String lastName, Department department) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.department = department;

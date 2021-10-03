@@ -1,18 +1,33 @@
 package pl.sda.rentacar.domain.employee
 
+import pl.sda.rentacar.domain.car.Car
 import pl.sda.rentacar.domain.department.Department
+import pl.sda.rentacar.domain.department.DepartmentService
+import spock.lang.Shared
 import spock.lang.Specification
+import spock.lang.Subject
 
 class EmployeeServiceSpec extends Specification {
 
-    def department = new Department(1L, "Opole", [], [])
+    def departmentService = Mock(DepartmentService)
     def repository = Mock(EmployeeRepository)
-    def service = new EmployeeService(repository)
+
+    @Subject
+    def service = new EmployeeService(departmentService, repository)
+
+    @Shared
+    def department = new Department(1L, "Opole", [] as Set<Employee>, [] as Set<Car>)
+
+    @Shared
+    def department2 = new Department(2L, "Warszawa", [] as Set<Employee>, [] as Set<Car>)
 
     def 'should call repository save on save'() {
         given:
-        def employee = new EmployeeCreateRequest("Lewis", "Oponiarz", department)
+        def employee = new EmployeeCreateRequest("Lewis", "Oponiarz", department.id)
         def expectedEmployeeArgument = new Employee("Lewis", "Oponiarz", department)
+
+        and:
+        departmentService.findDepartmentById(_ as Long) >> department
 
         when:
         service.addEmployee(employee)
@@ -38,8 +53,6 @@ class EmployeeServiceSpec extends Specification {
         }
     }
 
-    def department2 = new Department(1L, "Warszawa", [], [])
-
     def 'should find all employees'() {
         given:
         def employee = new Employee(1L, "Valtteri", "Doggas", department)
@@ -56,6 +69,11 @@ class EmployeeServiceSpec extends Specification {
             firstName == employee.firstName
             lastName == employee.lastName
             department == employee.department
+        }
+        with(result.last()) {
+            firstName == employee2.firstName
+            lastName == employee2.lastName
+            department == employee2.department
         }
     }
 

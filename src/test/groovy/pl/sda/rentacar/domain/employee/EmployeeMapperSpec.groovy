@@ -1,15 +1,21 @@
 package pl.sda.rentacar.domain.employee
 
+import pl.sda.rentacar.domain.car.Car
 import pl.sda.rentacar.domain.department.Department
+import spock.lang.Shared
 import spock.lang.Specification
 
 class EmployeeMapperSpec extends Specification {
 
-    def department = new Department(1L, "Opole", [], [])
+    @Shared
+    def departmentId = 1L
+
+    @Shared
+    def department = new Department(departmentId, "Opole", [] as Set<Employee>, [] as Set<Car>)
 
     def 'should map EmployeeCreateRequest to Employee'() {
         given:
-        def request = new EmployeeCreateRequest("Robert", "Kubica", department)
+        def request = new EmployeeCreateRequest("Robert", "Kubica", departmentId)
 
         when:
         def result = EmployeeMapper.MAPPER.mapToEmployee(request)
@@ -18,7 +24,7 @@ class EmployeeMapperSpec extends Specification {
         result.id == null
         result.firstName == request.firstName
         result.lastName == request.lastName
-        result.department == request.department
+        result.department == null
     }
 
     def "should map Employee to EmployeeView"() {
