@@ -14,12 +14,12 @@ public class ClientService {
 
     private final ClientRepository repository;
 
-    void addClient(ClientCreateRequest request) {
+    public void addClient(ClientCreateRequest request) {
         Client client = MAPPER.mapToClient(request);
         repository.save(client);
     }
 
-    List<ClientView> getALlClients() {
+    public List<ClientView> getALlClients() {
         return repository
                 .findAll()
                 .stream()
@@ -31,7 +31,7 @@ public class ClientService {
         return MAPPER.mapToClientView(findClientById(id));
     }
 
-    Client findClientById(Long id) {
+    public Client findClientById(Long id) {
         return repository
                 .findById(id)
                 .orElseThrow(() -> new ClientNotFoundException(id));
