@@ -16,11 +16,12 @@ class CarMapperSpec extends Specification {
         when:
         def result = CarMapper.MAPPER.mapToCar(request)
         then:
-        result.make == request.make
-        result.model == request.model
-        result.productionYear == request.productionYear
-        result.pricePerDay == request.pricePerDay
-        request.bodyType == request.bodyType
-
+        with(result) {
+            make == make
+            model == model
+            productionYear == productionYear
+            pricePerDay == pricePerDay
+            bodyType == bodyType
+        }
     }
 }

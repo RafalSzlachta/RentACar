@@ -1,8 +1,6 @@
 package pl.sda.rentacar.domain.car;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
@@ -13,7 +11,6 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @RequiredArgsConstructor
-//@NoArgsConstructor
 @Data
 @Table(name = "Cars")
 

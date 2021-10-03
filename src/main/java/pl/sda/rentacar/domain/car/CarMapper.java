@@ -13,5 +13,5 @@ interface CarMapper {
     @Mapping(target = "id", ignore = true)
     Car mapToCar(CarCreateRequest request);
 
-    CarView mapToCarView(Car client);
+    CarView mapToCarView(Car car);
 }

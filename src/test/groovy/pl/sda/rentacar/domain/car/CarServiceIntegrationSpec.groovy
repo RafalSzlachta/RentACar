@@ -41,5 +41,4 @@ class CarServiceIntegrationSpec extends Specification{
             bodyType == car.bodyType
         }
     }
-
 }
