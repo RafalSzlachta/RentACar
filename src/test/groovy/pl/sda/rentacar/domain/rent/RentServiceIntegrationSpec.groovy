@@ -5,13 +5,18 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
 import pl.sda.rentacar.domain.car.BodyType
 import pl.sda.rentacar.domain.car.Car
+import pl.sda.rentacar.domain.car.CarCreateRequest
+import pl.sda.rentacar.domain.car.CarService
 import pl.sda.rentacar.domain.car.CarStatus
 import pl.sda.rentacar.domain.client.Client
 import pl.sda.rentacar.domain.client.ClientCreateRequest
 import pl.sda.rentacar.domain.client.ClientRepository
 import pl.sda.rentacar.domain.client.ClientService
 import pl.sda.rentacar.domain.department.Department
+import pl.sda.rentacar.domain.department.DepartmentCreateRequest
+import pl.sda.rentacar.domain.department.DepartmentService
 import pl.sda.rentacar.domain.employee.Employee
+import pl.sda.rentacar.domain.employee.EmployeeCreateRequest
 import pl.sda.rentacar.domain.employee.EmployeeService
 import spock.lang.Shared
 import spock.lang.Specification
@@ -32,7 +37,13 @@ class RentServiceIntegrationSpec extends Specification {
     ClientService clientService
 
     @Autowired
+    DepartmentService departmentService
+
+    @Autowired
     EmployeeService employeeService
+
+    @Autowired
+    CarService carService
 
     @Shared
     def department = new Department(
@@ -42,20 +53,35 @@ class RentServiceIntegrationSpec extends Specification {
             [] as Set
     )
 
-    @Shared
+    /*@Shared
+    def departmentRequest = new DepartmentCreateRequest(
+            "Radom",
+            [] as Set,
+            [] as Set
+    )*/
+
+
+    /*@Shared
     def clientRequest = new ClientCreateRequest(
             "Otylia",
             "Jedrzejczak",
             "motylek@o2.pl",
-            "555777666")
+            "555777666")*/
 
-    @Shared
+    /*@Shared
     def employee = new Employee(
             1L,
             "Daniel",
             "Riczardo",
             department
-    )
+    )*/
+
+    /*@Shared
+    def employeeRequest = new EmployeeCreateRequest(
+            "Karol",
+            "Eklerek",
+            department.getId()
+    )*/
 
     @Shared
     def car = new Car(
@@ -68,13 +94,50 @@ class RentServiceIntegrationSpec extends Specification {
             BodyType.SEDAN
     )
 
+    /* @Shared
+     def carRequest = new CarCreateRequest(
+             "Mazda",
+             "MX-5",
+             2019,
+             BigDecimal.valueOf(100L),
+             BodyType.ROADSTER
+     )*/
+
     def 'should add rent'() {
         given:
+        cleanup()
+        def departmentRequest = new DepartmentCreateRequest(
+                "Radom",
+                [] as Set,
+                [] as Set
+        )
+        def departmentId = givenDepartmentExists(departmentRequest)
+        def employeeRequest = new EmployeeCreateRequest(
+                "Rimi",
+                "Kaikkonen",
+                departmentId
+        )
+        def employeeId = givenEmployeeExists(employeeRequest)
+        def clientRequest = new ClientCreateRequest(
+                "Otylia",
+                "Jedrzejczak",
+                "motylek@o2.pl",
+                "555777666")
+        def clientId = givenClientExists(clientRequest)
         clientService.addClient(clientRequest)
+        def carRequest = new CarCreateRequest(
+                "Mazda",
+                "MX-5",
+                2019,
+                BigDecimal.valueOf(100L),
+                BodyType.ROADSTER
+        )
+        def carId = givenCarExists(carRequest)
+        carService.addCar(carRequest)
         def request = new RentCreateRequest(
-                clientService.getALlClients().first().getId(),
-                employeeService.findAllEmployees().first().getId(),
-                car.id,
+                clientId,
+                employeeId,
+                carId,
                 "xD")
         service.addRent(request)
 
@@ -94,4 +157,25 @@ class RentServiceIntegrationSpec extends Specification {
             rentStatus == RentStatus.ACTIVE
         }
     }
+
+    private def givenDepartmentExists(DepartmentCreateRequest request) {
+        return departmentService.addDepartment(request)
+    }
+
+    private def givenClientExists(ClientCreateRequest request){
+        return  clientService.addClient(request)
+    }
+
+    private def givenEmployeeExists(EmployeeCreateRequest request){
+        return employeeService.addEmployee(request)
+    }
+
+    private def givenCarExists(CarCreateRequest request){
+        return carService.addCar(request)
+    }
+
+    def cleanup() {
+        repository.deleteAll()
+    }
 }
+

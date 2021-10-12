@@ -3,6 +3,7 @@ package pl.sda.rentacar.domain.rent;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 import pl.sda.rentacar.domain.car.Car;
 import pl.sda.rentacar.domain.client.Client;
 import pl.sda.rentacar.domain.employee.Employee;
@@ -26,12 +27,15 @@ public class Rent {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
     @ManyToOne
+    @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
     @OneToOne
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private Car car;
 
     private LocalDate startDate = LocalDate.now();
