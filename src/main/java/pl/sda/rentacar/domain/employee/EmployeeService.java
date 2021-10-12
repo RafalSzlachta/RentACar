@@ -18,11 +18,11 @@ public class EmployeeService {
     private final DepartmentService departmentService;
     private final EmployeeRepository employeeRepository;
 
-    public Long addEmployee(EmployeeCreateRequest request) {
+    public void addEmployee(EmployeeCreateRequest request) {
         Employee employee = MAPPER.mapToEmployee(request);
         Department department = departmentService.findDepartmentById(request.getDepartmentId());
         employee.setDepartment(department);
-        return employeeRepository.save(employee).getId();
+        employeeRepository.save(employee);
     }
 
     public List<EmployeeView> findAllEmployees() {

@@ -14,9 +14,9 @@ public class CarService {
 
     private final CarRepository repository;
 
-    public Long addCar(CarCreateRequest request) {
+    public void addCar(CarCreateRequest request) {
         Car car = MAPPER.mapToCar(request);
-        return repository.save(car).getId();
+        repository.save(car);
     }
 
     public List<CarView> getALlCars() {
@@ -51,3 +51,4 @@ public class CarService {
         repository.delete(findCarById(id));
     }
 }
+
