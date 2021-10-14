@@ -8,11 +8,13 @@ import pl.sda.rentacar.domain.car.Car
 import pl.sda.rentacar.domain.car.CarCreateRequest
 import pl.sda.rentacar.domain.car.CarService
 import pl.sda.rentacar.domain.car.CarStatus
+import pl.sda.rentacar.domain.client.Client
 import pl.sda.rentacar.domain.client.ClientCreateRequest
 import pl.sda.rentacar.domain.client.ClientService
 import pl.sda.rentacar.domain.department.Department
 import pl.sda.rentacar.domain.department.DepartmentCreateRequest
 import pl.sda.rentacar.domain.department.DepartmentService
+import pl.sda.rentacar.domain.employee.Employee
 import pl.sda.rentacar.domain.employee.EmployeeCreateRequest
 import pl.sda.rentacar.domain.employee.EmployeeService
 import spock.lang.Shared
@@ -43,6 +45,39 @@ class RentServiceIntegrationSpec extends Specification {
     CarService carService
 
     @Shared
+    def clientDaniel = new Client(
+            1L,
+            "Daniel",
+            "Olbrychski",
+            "kochamskutery@szabelka.eu",
+            "777888999"
+    )
+
+    @Shared
+    def departmentZadupie = new Department(
+            1L,
+            "Zadupie",
+            [] as Set,
+            [] as Set)
+
+    @Shared
+    def employeeMax = new Employee(
+            1L,
+            "Max",
+            "Wersztapen",
+            departmentZadupie)
+
+    @Shared
+    def carForFamily = new Car(
+            1L,
+            "Renaul",
+            "Espace",
+            2007,
+            CarStatus.AVAILABLE,
+            BigDecimal.valueOf(110),
+            BodyType.MINIVAN
+    )
+    @Shared
     def departmentRequest = new DepartmentCreateRequest(
             "Radom",
             [] as Set,
@@ -57,12 +92,28 @@ class RentServiceIntegrationSpec extends Specification {
             "555777666")
 
     @Shared
+    def clientRequest2 = new ClientCreateRequest(
+            "Michal",
+            "Zewlakow",
+            "wybitnyreprezentant@pzpn.pl",
+            "555777888")
+
+    @Shared
     def carRequest = new CarCreateRequest(
             "Mazda",
             "MX-5",
             2019,
             BigDecimal.valueOf(100L),
             BodyType.ROADSTER
+    )
+
+    @Shared
+    def carRequest2 = new CarCreateRequest(
+            "Volvo",
+            "C70",
+            2012,
+            BigDecimal.valueOf(100L),
+            BodyType.CONVERTIBLE
     )
 
     def 'should add rent'() {
@@ -79,12 +130,12 @@ class RentServiceIntegrationSpec extends Specification {
         def request = new RentCreateRequest(
                 clientService.getALlClients().first().getId(),
                 employeeService.findAllEmployees().first().getId(),
-                carService.getALlCars().last().getId(),
+                carService.getALlCars().first().getId(),
                 "xD")
         service.addRent(request)
 
         when:
-        def result = repository.findAll().last()
+        def result = repository.findAll().first()
 
         then:
         with(result) {
@@ -96,6 +147,81 @@ class RentServiceIntegrationSpec extends Specification {
             returnDate == null
             charge == null
             comment == request.comment
+            rentStatus == RentStatus.ACTIVE
+        }
+    }
+
+    def 'should map Rent to RentView'() {
+        given:
+        cleanup()
+        def request = new Rent(
+                1L,
+                clientDaniel,
+                employeeMax,
+                carForFamily,
+                LocalDate.now().minusDays(1L),
+                LocalDate.now(),
+                carForFamily.getPricePerDay(),
+                "tanio",
+                RentStatus.FINISHED)
+
+        when:
+        def result = RentMapper.MAPPER.mapToRentView(request)
+
+        then:
+        result.client == request.client
+        result.employee == request.employee
+        result.startDate == request.startDate
+        result.returnDate == request.returnDate
+        result.charge == request.charge
+        result.comment == request.comment
+    }
+
+    def 'should add and find two rents' ()  {
+        given:
+        cleanup()
+        def departmentId = givenDepartmentExists(departmentRequest)
+        def employeeRequest = new EmployeeCreateRequest(
+                "Karol",
+                "Eklerek",
+                departmentId)
+        def employeeRequest2 = new EmployeeCreateRequest(
+                "Daniel",
+                "Riczardo",
+                departmentId)
+        employeeService.addEmployee(employeeRequest)
+        employeeService.addEmployee(employeeRequest2)
+        clientService.addClient(clientRequest)
+        clientService.addClient(clientRequest2)
+        carService.addCar(carRequest)
+        carService.addCar(carRequest2)
+        def request = new RentCreateRequest(
+                clientService.getALlClients().first().getId(),
+                employeeService.findAllEmployees().first().getId(),
+                carService.getALlCars().first().getId(),
+                "xD")
+        def request2 = new RentCreateRequest(
+                clientService.getALlClients().last().getId(),
+                employeeService.findAllEmployees().last().getId(),
+                carService.getALlCars().last().getId(),
+                "xDD")
+        service.addRent(request)
+        service.addRent(request2)
+
+        when:
+        def rents = service.getALlRents()
+
+        then:
+        rents !=null
+        rents.size() == 2
+        with(rents.last()) {
+            client.id == request2.clientId
+            employee.id == request2.employeeId
+            car.id == request2.carId
+            startDate == LocalDate.now()
+            returnDate == null
+            charge == null
+            comment == request2.comment
             rentStatus == RentStatus.ACTIVE
         }
     }
