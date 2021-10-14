@@ -10,10 +10,7 @@ import lombok.NoArgsConstructor;
 public class RentCreateRequest {
 
     private Long clientId;
-
     private Long employeeId;
-
     private Long carId;
-
     private String comment;
 }

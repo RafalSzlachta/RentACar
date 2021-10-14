@@ -10,8 +10,8 @@ import pl.sda.rentacar.domain.employee.EmployeeService;
 @Service
 @RequiredArgsConstructor
 public class RentService {
-    private final RentRepository repository;
 
+    private final RentRepository repository;
     private final ClientService clientService;
     private final EmployeeService employeeService;
     private final CarService carService;

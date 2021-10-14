@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class RentView {
+
     private Client client;
     private Employee employee;
     private Car car;

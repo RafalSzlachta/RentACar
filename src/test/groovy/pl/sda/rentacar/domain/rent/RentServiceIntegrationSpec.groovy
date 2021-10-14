@@ -8,14 +8,11 @@ import pl.sda.rentacar.domain.car.Car
 import pl.sda.rentacar.domain.car.CarCreateRequest
 import pl.sda.rentacar.domain.car.CarService
 import pl.sda.rentacar.domain.car.CarStatus
-import pl.sda.rentacar.domain.client.Client
 import pl.sda.rentacar.domain.client.ClientCreateRequest
-import pl.sda.rentacar.domain.client.ClientRepository
 import pl.sda.rentacar.domain.client.ClientService
 import pl.sda.rentacar.domain.department.Department
 import pl.sda.rentacar.domain.department.DepartmentCreateRequest
 import pl.sda.rentacar.domain.department.DepartmentService
-import pl.sda.rentacar.domain.employee.Employee
 import pl.sda.rentacar.domain.employee.EmployeeCreateRequest
 import pl.sda.rentacar.domain.employee.EmployeeService
 import spock.lang.Shared
@@ -46,14 +43,6 @@ class RentServiceIntegrationSpec extends Specification {
     CarService carService
 
     @Shared
-    def department = new Department(
-            1L,
-            "Lodz",
-            [] as Set,
-            [] as Set
-    )
-
-    @Shared
     def departmentRequest = new DepartmentCreateRequest(
             "Radom",
             [] as Set,
@@ -66,32 +55,6 @@ class RentServiceIntegrationSpec extends Specification {
             "Jedrzejczak",
             "motylek@o2.pl",
             "555777666")
-
-    /*@Shared
-    def employee = new Employee(
-            1L,
-            "Daniel",
-            "Riczardo",
-            department
-    )*/
-
-    /*@Shared
-    def employeeRequest = new EmployeeCreateRequest(
-            "Karol",
-            "Eklerek",
-            department.getId()
-    )*/
-
-    @Shared
-    def car = new Car(
-            1L,
-            "Skoda",
-            "105",
-            1988,
-            CarStatus.AVAILABLE,
-            BigDecimal.valueOf(50L),
-            BodyType.SEDAN
-    )
 
     @Shared
     def carRequest = new CarCreateRequest(
@@ -106,7 +69,10 @@ class RentServiceIntegrationSpec extends Specification {
         given:
         cleanup()
         def departmentId = givenDepartmentExists(departmentRequest)
-        def employeeRequest = new EmployeeCreateRequest("Rimi", "Kaikkonen", departmentId)
+        def employeeRequest = new EmployeeCreateRequest(
+                "Rimi",
+                "Kaikkonen",
+                departmentId)
         employeeService.addEmployee(employeeRequest)
         clientService.addClient(clientRequest)
         carService.addCar(carRequest)

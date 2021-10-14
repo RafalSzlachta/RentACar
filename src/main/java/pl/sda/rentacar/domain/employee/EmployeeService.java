@@ -33,9 +33,8 @@ public class EmployeeService {
                 .collect(toList());
     }
 
-    public EmployeeView findEmployeeById(Long id) { //to refactor
-        Employee foundEmployee = getEmployeeById(id);
-        return MAPPER.mapToEmployeeView(foundEmployee);
+    public EmployeeView findEmployeeById(Long id) {
+        return MAPPER.mapToEmployeeView(getEmployeeById(id));
     }
 
     public Employee getEmployeeById(Long id) {
