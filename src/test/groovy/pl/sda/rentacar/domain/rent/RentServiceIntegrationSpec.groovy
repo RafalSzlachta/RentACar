@@ -226,6 +226,37 @@ class RentServiceIntegrationSpec extends Specification {
         }
     }
 
+    def 'should update rent with given id'() {
+        given:
+        def rent = new RentCreateRequest(
+                clientService.getALlClients().first().getId(),
+                employeeService.findAllEmployees().first().getId(),
+                carService.getALlCars().first().getId(),
+                "this is comment")
+        def rentUpdate = new RentUpdateRequest(
+                LocalDate.now().plusDays(2L),
+                BigDecimal.valueOf(200/*carRequest2.getPricePerDay()*2*/),
+                "koniec imprezy",
+                RentStatus.FINISHED
+        )
+
+        service.addRent(rent)
+        def id = repository.findAll().last().id
+
+        when:
+        service.updateRent(id, rentUpdate)
+        def updatedRent = service.getRentById(id)
+
+        then:
+        with(updatedRent){
+            startDate == LocalDate.now()
+            returnDate == rentUpdate.returnDate
+            charge == rentUpdate.charge
+            comment == rentUpdate.comment
+            rentStatus == rentUpdate.rentStatus
+        }
+    }
+
     private def givenDepartmentExists(DepartmentCreateRequest request) {
         return departmentService.addDepartment(request)
     }

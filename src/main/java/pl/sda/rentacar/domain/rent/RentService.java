@@ -40,4 +40,23 @@ public class RentService {
                 .map(MAPPER::mapToRentView)
                 .collect(Collectors.toList());
     }
+
+    public Rent findRentById(Long id){
+        return repository
+                .findById(id)
+                .orElseThrow(() -> new RentNotFoundException(id));
+    }
+
+    public RentView getRentById(Long id){
+        return MAPPER.mapToRentView(findRentById(id));
+    }
+
+    public void updateRent(Long id, RentUpdateRequest request){
+        Rent rent = findRentById(id);
+        rent.setReturnDate(request.getReturnDate());
+        rent.setCharge(request.getCharge());
+        rent.setRentStatus(request.getRentStatus());
+        rent.setComment(request.getComment());
+        repository.save(rent);
+    }
 }
