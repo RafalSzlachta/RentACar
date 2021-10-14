@@ -153,7 +153,6 @@ class RentServiceIntegrationSpec extends Specification {
 
     def 'should map Rent to RentView'() {
         given:
-        cleanup()
         def request = new Rent(
                 1L,
                 clientDaniel,
@@ -179,7 +178,6 @@ class RentServiceIntegrationSpec extends Specification {
 
     def 'should add and find two rents' ()  {
         given:
-        cleanup()
         def departmentId = givenDepartmentExists(departmentRequest)
         def employeeRequest = new EmployeeCreateRequest(
                 "Karol",
@@ -255,6 +253,38 @@ class RentServiceIntegrationSpec extends Specification {
             comment == rentUpdate.comment
             rentStatus == rentUpdate.rentStatus
         }
+    }
+
+    def 'should remove rent with given id'(){
+        given:
+        def rent = new RentCreateRequest(
+                clientService.getALlClients().first().getId(),
+                employeeService.findAllEmployees().first().getId(),
+                carService.getALlCars().first().getId(),
+                "this is not comment")
+        service.addRent(rent)
+        def addedRent = repository.findAll().first()
+        def addedRentId = repository.findAll().first().id
+
+        and:
+        with(addedRent) {
+            id == addedRentId
+            client.id == rent.clientId
+            employee.id == rent.employeeId
+            car.id == rent.carId
+            startDate == LocalDate.now()
+            returnDate == null
+            charge == null
+            comment == rent.comment
+            rentStatus == RentStatus.ACTIVE
+        }
+
+        when:
+        service.removeRent(addedRentId)
+
+        then:
+        repository.findById(addedRentId).isEmpty()
+        repository.findAll().isEmpty()
     }
 
     private def givenDepartmentExists(DepartmentCreateRequest request) {

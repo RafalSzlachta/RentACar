@@ -59,4 +59,8 @@ public class RentService {
         rent.setComment(request.getComment());
         repository.save(rent);
     }
+
+    public void removeRent(Long id){
+        repository.delete(findRentById(id));
+    }
 }
