@@ -53,13 +53,12 @@ class RentServiceIntegrationSpec extends Specification {
             [] as Set
     )
 
-    /*@Shared
+    @Shared
     def departmentRequest = new DepartmentCreateRequest(
             "Radom",
             [] as Set,
             [] as Set
-    )*/
-
+    )
 
     @Shared
     def clientRequest = new ClientCreateRequest(
@@ -106,33 +105,27 @@ class RentServiceIntegrationSpec extends Specification {
     def 'should add rent'() {
         given:
         cleanup()
-        def departmentRequest = new DepartmentCreateRequest(
-                "Radom",
-                [] as Set,
-                [] as Set
-        )
         def departmentId = givenDepartmentExists(departmentRequest)
         def employeeRequest = new EmployeeCreateRequest("Rimi", "Kaikkonen", departmentId)
-        //def employeeId = givenEmployeeExists(employeeRequest)
         employeeService.addEmployee(employeeRequest)
         clientService.addClient(clientRequest)
         carService.addCar(carRequest)
         def request = new RentCreateRequest(
                 clientService.getALlClients().first().getId(),
                 employeeService.findAllEmployees().first().getId(),
-                carService.getALlCars().first().getId(),
+                carService.getALlCars().last().getId(),
                 "xD")
         service.addRent(request)
 
         when:
-        def result = repository.findAll().first()
+        def result = repository.findAll().last()
 
         then:
         with(result) {
             id != null
             client.id == request.clientId
             employee.id == request.employeeId
-            //car.id == request.carId
+            car.id == request.carId
             startDate == LocalDate.now()
             returnDate == null
             charge == null
@@ -143,10 +136,6 @@ class RentServiceIntegrationSpec extends Specification {
 
     private def givenDepartmentExists(DepartmentCreateRequest request) {
         return departmentService.addDepartment(request)
-    }
-
-    private def givenEmployeeExists(EmployeeCreateRequest request){
-        return employeeService.addEmployee(request)
     }
 
     def cleanup() {

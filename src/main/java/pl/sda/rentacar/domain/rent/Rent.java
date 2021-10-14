@@ -35,7 +35,6 @@ public class Rent {
     private Employee employee;
 
     @OneToOne
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private Car car;
 
     private LocalDate startDate = LocalDate.now();

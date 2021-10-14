@@ -33,7 +33,7 @@ public class EmployeeService {
                 .collect(toList());
     }
 
-    public EmployeeView findEmployeeById(Long id) {
+    public EmployeeView findEmployeeById(Long id) { //to refactor
         Employee foundEmployee = getEmployeeById(id);
         return MAPPER.mapToEmployeeView(foundEmployee);
     }
