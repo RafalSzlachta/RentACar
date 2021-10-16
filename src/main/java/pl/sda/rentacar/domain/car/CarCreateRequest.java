@@ -16,4 +16,5 @@ public class CarCreateRequest {
     private Integer productionYear;
     private BigDecimal pricePerDay;
     private BodyType bodyType;
+    private Long departmentId;
 }

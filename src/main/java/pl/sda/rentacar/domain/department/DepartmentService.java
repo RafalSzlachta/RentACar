@@ -2,6 +2,7 @@ package pl.sda.rentacar.domain.department;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.sda.rentacar.domain.car.Car;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,6 +50,11 @@ public class DepartmentService {
 
     public void removeDepartment(Long id) {
         repository.delete(findDepartmentById(id));
+    }
+
+    public void addCar(Long departmentId, Car car) {
+        Department department = findDepartmentById(departmentId);
+        department.getCars().add(car);
     }
 
 }
