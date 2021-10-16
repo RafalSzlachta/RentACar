@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static pl.sda.rentacar.domain.client.ClientMapper.*;
+import static pl.sda.rentacar.domain.client.ClientMapper.MAPPER;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +19,7 @@ public class ClientService {
         repository.save(client);
     }
 
-    public List<ClientView> getALlClients() {
+    public List<ClientView> getAllClients() {
         return repository
                 .findAll()
                 .stream()

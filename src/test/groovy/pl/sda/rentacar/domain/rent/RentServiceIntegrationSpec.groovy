@@ -118,7 +118,6 @@ class RentServiceIntegrationSpec extends Specification {
 
     def 'should add rent'() {
         given:
-        cleanup()
         def departmentId = givenDepartmentExists(departmentRequest)
         def employeeRequest = new EmployeeCreateRequest(
                 "Rimi",
@@ -128,7 +127,7 @@ class RentServiceIntegrationSpec extends Specification {
         clientService.addClient(clientRequest)
         carService.addCar(carRequest)
         def request = new RentCreateRequest(
-                clientService.getALlClients().first().getId(),
+                clientService.getAllClients().first().getId(),
                 employeeService.findAllEmployees().first().getId(),
                 carService.getALlCars().first().getId(),
                 "xD")
@@ -194,12 +193,12 @@ class RentServiceIntegrationSpec extends Specification {
         carService.addCar(carRequest)
         carService.addCar(carRequest2)
         def request = new RentCreateRequest(
-                clientService.getALlClients().first().getId(),
+                clientService.getAllClients().first().getId(),
                 employeeService.findAllEmployees().first().getId(),
                 carService.getALlCars().first().getId(),
                 "xD")
         def request2 = new RentCreateRequest(
-                clientService.getALlClients().last().getId(),
+                clientService.getAllClients().last().getId(),
                 employeeService.findAllEmployees().last().getId(),
                 carService.getALlCars().last().getId(),
                 "xDD")
@@ -227,7 +226,7 @@ class RentServiceIntegrationSpec extends Specification {
     def 'should update rent with given id'() {
         given:
         def rent = new RentCreateRequest(
-                clientService.getALlClients().first().getId(),
+                clientService.getAllClients().first().getId(),
                 employeeService.findAllEmployees().first().getId(),
                 carService.getALlCars().first().getId(),
                 "this is comment")
@@ -258,7 +257,7 @@ class RentServiceIntegrationSpec extends Specification {
     def 'should remove rent with given id'(){
         given:
         def rent = new RentCreateRequest(
-                clientService.getALlClients().first().getId(),
+                clientService.getAllClients().first().getId(),
                 employeeService.findAllEmployees().first().getId(),
                 carService.getALlCars().first().getId(),
                 "this is not comment")
