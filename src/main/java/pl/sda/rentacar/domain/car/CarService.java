@@ -14,7 +14,7 @@ public class CarService {
 
     private final CarRepository repository;
 
-    void addCar(CarCreateRequest request) {
+    public void addCar(CarCreateRequest request) {
         Car car = MAPPER.mapToCar(request);
         repository.save(car);
     }

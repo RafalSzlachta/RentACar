@@ -26,6 +26,6 @@ public class Department {
     @OneToMany(fetch = FetchType.EAGER)
     private Set<Employee> employees;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Car> cars;
 }

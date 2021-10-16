@@ -24,6 +24,7 @@ public class Car {
     private Integer productionYear;
     private CarStatus status = CarStatus.AVAILABLE;
     private BigDecimal pricePerDay;
+    @Enumerated(value = EnumType.STRING)
     private BodyType bodyType;
 }
 
