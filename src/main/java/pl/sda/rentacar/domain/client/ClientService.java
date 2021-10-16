@@ -14,7 +14,7 @@ public class ClientService {
 
     private final ClientRepository repository;
 
-    void addClient(ClientCreateRequest request) {
+    public void addClient(ClientCreateRequest request) {
         Client client = MAPPER.mapToClient(request);
         repository.save(client);
     }
