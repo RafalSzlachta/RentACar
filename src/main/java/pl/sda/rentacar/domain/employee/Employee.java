@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.sda.rentacar.domain.department.Department;
-
 import javax.persistence.*;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -21,7 +20,6 @@ public class Employee {
     private Long id;
 
     private String firstName;
-
     private String lastName;
 
     @ManyToOne

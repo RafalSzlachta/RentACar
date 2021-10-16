@@ -25,22 +25,27 @@ public class Rent {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
     @OneToOne
     private Car car;
 
-    private LocalDate startDate;
-
+    private LocalDate startDate = LocalDate.now();
     private LocalDate returnDate;
-
     private BigDecimal charge;
-
     private String comment;
+    private RentStatus rentStatus = RentStatus.ACTIVE;
 
-    private RentStatus rentStatus;
+    public Rent(Client client, Employee employee, Car car,  String comment) {
+        this.client = client;
+        this.employee = employee;
+        this.car = car;
+        this.comment = comment;
+    }
 }

@@ -14,12 +14,12 @@ public class CarService {
 
     private final CarRepository repository;
 
-    void addCar(CarCreateRequest request) {
+    public void addCar(CarCreateRequest request) {
         Car car = MAPPER.mapToCar(request);
         repository.save(car);
     }
 
-    List<CarView> getALlCars() {
+    public List<CarView> getALlCars() {
         return repository
                 .findAll()
                 .stream()
@@ -27,17 +27,17 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
-    CarView getCarById(Long id) {
+    public CarView getCarById(Long id) {
         return MAPPER.mapToCarView(findCarById(id));
     }
 
-    Car findCarById(Long id) {
+    public Car findCarById(Long id) {
         return repository
                 .findById(id)
                 .orElseThrow(() -> new CarNotFoundException(id));
     }
 
-    void updateCar(Long id, CarCreateRequest request) {
+    public void updateCar(Long id, CarCreateRequest request) {
         Car car = findCarById(id);
         car.setMake(request.getMake());
         car.setModel(request.getModel());

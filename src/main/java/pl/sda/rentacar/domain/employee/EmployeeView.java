@@ -10,9 +10,8 @@ import pl.sda.rentacar.domain.department.Department;
 @NoArgsConstructor
 public class EmployeeView {
 
+    private Long id;
     private String firstName;
-
     private String lastName;
-
     private Department department;
 }

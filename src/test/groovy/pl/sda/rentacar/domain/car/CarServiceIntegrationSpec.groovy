@@ -26,6 +26,7 @@ class CarServiceIntegrationSpec extends Specification{
             )
     def 'should add car'(){
         given:
+        cleanup()
         service.addCar(car)
 
         when:
@@ -40,5 +41,9 @@ class CarServiceIntegrationSpec extends Specification{
             pricePerDay == car.pricePerDay
             bodyType == car.bodyType
         }
+    }
+
+    def cleanup() {
+        repository.deleteAll()
     }
 }
