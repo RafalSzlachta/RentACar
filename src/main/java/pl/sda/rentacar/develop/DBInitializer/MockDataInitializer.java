@@ -38,8 +38,8 @@ public class MockDataInitializer {
                     EmployeeMockData
                     .generateMockEmployee(
                             departmentService
-                            .getAllDepartments()
-                                    .get(RANDOM.nextInt(count % 2))
+                                .getAllDepartments()
+                                .get(RANDOM.nextInt(count / 2))
                                     .getId()));
             carService.addCar(CarMockData.generateMockCar());
             clientService.addClient(ClientMockData.generateMockClient());

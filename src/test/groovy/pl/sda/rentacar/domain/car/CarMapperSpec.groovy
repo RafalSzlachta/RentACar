@@ -11,7 +11,8 @@ class CarMapperSpec extends Specification {
                 "Panda",
                 1234,
                 BigDecimal.TEN,
-                BodyType.HATCHBACK
+                BodyType.HATCHBACK,
+                1L
         )
         when:
         def result = CarMapper.MAPPER.mapToCar(request)
