@@ -43,8 +43,11 @@ public class EmployeeService {
                 .orElseThrow(() -> new EmployeeNotFoundException(id));
     }
 
+    @Transactional
     public void deleteEmployeeById(Long id) {
-        employeeRepository.delete(getEmployeeById(id));
+        Employee employee = getEmployeeById(id);
+        employee.getDepartment().getEmployees().remove(employee);
+        employeeRepository.deleteById(id);
     }
 
     @Transactional

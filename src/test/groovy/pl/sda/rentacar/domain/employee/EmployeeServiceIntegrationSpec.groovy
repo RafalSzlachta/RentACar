@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
 import pl.sda.rentacar.domain.department.DepartmentCreateRequest
+import pl.sda.rentacar.domain.department.DepartmentRepository
 import pl.sda.rentacar.domain.department.DepartmentService
 import spock.lang.Shared
 import spock.lang.Specification
@@ -20,6 +21,9 @@ class EmployeeServiceIntegrationSpec extends Specification {
 
     @Autowired
     private EmployeeRepository repository
+
+    @Autowired
+    private DepartmentRepository departmentRepository
 
     @Shared
     def department = new DepartmentCreateRequest("Opole", [] as Set, [] as Set)
@@ -75,5 +79,10 @@ class EmployeeServiceIntegrationSpec extends Specification {
 
     private def givenDepartmentExists(DepartmentCreateRequest request) {
        return departmentService.addDepartment(request)
+    }
+
+    def cleanup() {
+        departmentRepository.deleteAll()
+        repository.deleteAll()
     }
 }

@@ -11,6 +11,7 @@ import pl.sda.rentacar.domain.client.ClientCreateRequest
 import pl.sda.rentacar.domain.client.ClientRepository
 import pl.sda.rentacar.domain.client.ClientService
 import pl.sda.rentacar.domain.department.DepartmentCreateRequest
+import pl.sda.rentacar.domain.department.DepartmentRepository
 import pl.sda.rentacar.domain.department.DepartmentService
 import pl.sda.rentacar.domain.employee.EmployeeCreateRequest
 import pl.sda.rentacar.domain.employee.EmployeeRepository
@@ -46,6 +47,9 @@ class RentServiceIntegrationSpec extends Specification {
     ClientRepository clientRepository
 
     @Autowired
+    DepartmentRepository departmentRepository
+
+    @Autowired
     EmployeeRepository employeeRepository
 
     @Autowired
@@ -75,8 +79,9 @@ class RentServiceIntegrationSpec extends Specification {
     def cleanup() {
         repository.deleteAll()
         clientRepository.deleteAll()
-        employeeRepository.deleteAll()
-        carRepository.deleteAll()
+//        employeeRepository.deleteAll()
+        departmentRepository.deleteAll()
+//        carRepository.deleteAll()
     }
 
     def 'should add rent'() {

@@ -28,7 +28,7 @@ public class Department {
 
     private String address;
 
-    @OneToMany(mappedBy = "department", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "department", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Employee> employees = Collections.emptySet();
 
     @OneToMany(mappedBy = "department", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
