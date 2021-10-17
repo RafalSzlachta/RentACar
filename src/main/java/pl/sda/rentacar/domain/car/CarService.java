@@ -3,6 +3,7 @@ package pl.sda.rentacar.domain.car;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.sda.rentacar.domain.department.Department;
 import pl.sda.rentacar.domain.department.DepartmentService;
 
 import java.util.List;
@@ -21,7 +22,9 @@ public class CarService {
     // TODO - required update of integration tests
     public void addCar(CarCreateRequest request) {
         Car car = MAPPER.mapToCar(request);
-        departmentService.addCar(request.getDepartmentId(), car);
+        Department department = departmentService.findDepartmentById(request.getDepartmentId());
+        car.setDepartment(department);
+        repository.save(car);
     }
 
     public List<CarView> getAllCars() {
@@ -53,7 +56,8 @@ public class CarService {
     }
 
     public void removeCar(Long id) {
-        repository.delete(findCarById(id));
+        Car car = findCarById(id);
+        repository.delete(car);
     }
 }
 

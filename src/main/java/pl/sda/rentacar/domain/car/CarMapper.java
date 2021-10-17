@@ -8,7 +8,7 @@ import static org.mapstruct.factory.Mappers.getMapper;
 @Mapper
 interface CarMapper {
 
-    pl.sda.rentacar.domain.car.CarMapper MAPPER = getMapper(pl.sda.rentacar.domain.car.CarMapper.class);
+    CarMapper MAPPER = getMapper(pl.sda.rentacar.domain.car.CarMapper.class);
 
     @Mapping(target = "id", ignore = true)
     Car mapToCar(CarCreateRequest request);

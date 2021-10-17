@@ -72,6 +72,13 @@ class RentServiceIntegrationSpec extends Specification {
             "wybitnyreprezentant@pzpn.pl",
             "555777888")
 
+    def cleanup() {
+        repository.deleteAll()
+        clientRepository.deleteAll()
+        employeeRepository.deleteAll()
+        carRepository.deleteAll()
+    }
+
     def 'should add rent'() {
         given:
         def departmentId = givenDepartmentExists(departmentRequest)
@@ -262,11 +269,5 @@ class RentServiceIntegrationSpec extends Specification {
 
     private def givenDepartmentExists(DepartmentCreateRequest request) {
         return departmentService.addDepartment(request)
-    }
-
-    def cleanup() {
-        repository.deleteAll()
-        clientRepository.deleteAll()
-        employeeRepository.deleteAll()
     }
 }

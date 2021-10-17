@@ -49,7 +49,8 @@ class RentMapperSpec extends Specification{
             2007,
             CarStatus.AVAILABLE,
             BigDecimal.valueOf(110),
-            BodyType.MINIVAN
+            BodyType.MINIVAN,
+            null
     )
 
     def 'should map Rent to RentView'() {

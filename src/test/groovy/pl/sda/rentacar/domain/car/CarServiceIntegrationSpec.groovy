@@ -4,13 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
 import pl.sda.rentacar.domain.department.Department
+import pl.sda.rentacar.domain.department.DepartmentCreateRequest
 import pl.sda.rentacar.domain.department.DepartmentRepository
+import pl.sda.rentacar.domain.department.DepartmentService
+import pl.sda.rentacar.domain.employee.Employee
 import spock.lang.Shared
 import spock.lang.Specification
 
 @SpringBootTest
 @ContextConfiguration
-class CarServiceIntegrationSpec extends Specification{
+class CarServiceIntegrationSpec extends Specification {
 
     @Autowired
     private CarRepository repository
@@ -19,37 +22,20 @@ class CarServiceIntegrationSpec extends Specification{
     private CarService service
 
     @Autowired
-    private DepartmentRepository departmentRepository
+    private DepartmentService departmentService
 
-    @Shared
-    def department = new Department(
-            13L,
-            "Zimna Wodka",
-            [] as Set,
-            [] as Set
-    )
-
-    @Shared
-    def car = new CarCreateRequest(
-            "Ford",
-            "Focus",
-            1324,
-            BigDecimal.valueOf(100L),
-            BodyType.PICKUP,
-            department.getId()
-            )
-
-    def 'should add car'(){
+    def 'should add car'() {
         given:
-        cleanup()
-        departmentRepository.save(department)
-        service.addCar(car)
+        def department = new DepartmentCreateRequest("Warszawa", [] as Set<Employee>, [] as Set<Car>)
+        def departmentId = departmentService.addDepartment(department)
+        def car = carCreateRequestWithDepartmentId(departmentId)
 
         when:
-        def result = repository.findAll().first()
+        service.addCar(car)
 
         then:
-        with(result){
+        def result = repository.findAll().first()
+        with(result) {
             id != null
             make == car.make
             model == car.model
@@ -60,7 +46,18 @@ class CarServiceIntegrationSpec extends Specification{
         }
     }
 
-    def cleanup() {
-        repository.deleteAll()
+//    def cleanup() {
+//        repository.deleteAll()
+//    }
+
+    private static CarCreateRequest carCreateRequestWithDepartmentId(Long departmentId) {
+        new CarCreateRequest(
+                "Ford",
+                "Focus",
+                1324,
+                BigDecimal.valueOf(100L),
+                BodyType.PICKUP,
+                departmentId
+        )
     }
 }
