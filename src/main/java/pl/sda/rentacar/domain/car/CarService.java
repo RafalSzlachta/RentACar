@@ -2,28 +2,36 @@ package pl.sda.rentacar.domain.car;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import pl.sda.rentacar.domain.department.Department;
+import pl.sda.rentacar.domain.department.DepartmentService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static pl.sda.rentacar.domain.car.CarMapper.*;
+import static pl.sda.rentacar.domain.car.CarMapper.MAPPER;
 
 @Service
 @RequiredArgsConstructor
 public class CarService {
 
     private final CarRepository repository;
+    private final DepartmentService departmentService;
 
+    @Transactional
+    // TODO - required update of integration tests
     public void addCar(CarCreateRequest request) {
         Car car = MAPPER.mapToCar(request);
+        Department department = departmentService.findDepartmentById(request.getDepartmentId());
+        car.setDepartment(department);
         repository.save(car);
     }
 
-    public List<CarView> getALlCars() {
+    public List<CarView> getAllCars() {
         return repository
-                .findAll()
-                .stream()
-                .map(MAPPER::mapToCarView)
+            .findAll()
+            .stream()
+            .map(MAPPER::mapToCarView)
                 .collect(Collectors.toList());
     }
 
@@ -48,7 +56,8 @@ public class CarService {
     }
 
     public void removeCar(Long id) {
-        repository.delete(findCarById(id));
+        Car car = findCarById(id);
+        repository.delete(car);
     }
 }
 

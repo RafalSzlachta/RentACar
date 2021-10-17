@@ -11,6 +11,7 @@ import pl.sda.rentacar.domain.client.ClientCreateRequest
 import pl.sda.rentacar.domain.client.ClientRepository
 import pl.sda.rentacar.domain.client.ClientService
 import pl.sda.rentacar.domain.department.DepartmentCreateRequest
+import pl.sda.rentacar.domain.department.DepartmentRepository
 import pl.sda.rentacar.domain.department.DepartmentService
 import pl.sda.rentacar.domain.employee.EmployeeCreateRequest
 import pl.sda.rentacar.domain.employee.EmployeeRepository
@@ -46,6 +47,9 @@ class RentServiceIntegrationSpec extends Specification {
     ClientRepository clientRepository
 
     @Autowired
+    DepartmentRepository departmentRepository
+
+    @Autowired
     EmployeeRepository employeeRepository
 
     @Autowired
@@ -72,23 +76,13 @@ class RentServiceIntegrationSpec extends Specification {
             "wybitnyreprezentant@pzpn.pl",
             "555777888")
 
-    @Shared
-    def carRequest = new CarCreateRequest(
-            "Mazda",
-            "MX-5",
-            2019,
-            BigDecimal.valueOf(100L),
-            BodyType.ROADSTER
-    )
-
-    @Shared
-    def carRequest2 = new CarCreateRequest(
-            "Volvo",
-            "C70",
-            2012,
-            BigDecimal.valueOf(100L),
-            BodyType.CONVERTIBLE
-    )
+    def cleanup() {
+        repository.deleteAll()
+        clientRepository.deleteAll()
+//        employeeRepository.deleteAll()
+        departmentRepository.deleteAll()
+//        carRepository.deleteAll()
+    }
 
     def 'should add rent'() {
         given:
@@ -98,12 +92,19 @@ class RentServiceIntegrationSpec extends Specification {
                 "Kaikkonen",
                 departmentId))
         clientService.addClient(clientRequest)
-        carService.addCar(carRequest)
+        carService.addCar(new CarCreateRequest(
+                "Mazda",
+                "MX-5",
+                2019,
+                BigDecimal.valueOf(100L),
+                BodyType.ROADSTER,
+                departmentId
+        ))
 
         def request = new RentCreateRequest(
                 clientService.getAllClients().first().getId(),
                 employeeService.findAllEmployees().first().getId(),
-                carService.getALlCars().first().getId(),
+                carService.getAllCars().first().getId(),
                 "xD")
         service.addRent(request)
 
@@ -124,32 +125,42 @@ class RentServiceIntegrationSpec extends Specification {
         }
     }
 
-    def 'should add and find two rents' ()  {
+    def 'should add and find two rents'() {
         given:
         def departmentId = givenDepartmentExists(departmentRequest)
-        def employeeRequest = new EmployeeCreateRequest(
+        employeeService.addEmployee(new EmployeeCreateRequest(
                 "Karol",
                 "Eklerek",
-                departmentId)
-        def employeeRequest2 = new EmployeeCreateRequest(
+                departmentId))
+        employeeService.addEmployee(new EmployeeCreateRequest(
                 "Daniel",
                 "Riczardo",
-                departmentId)
-        employeeService.addEmployee(employeeRequest)
-        employeeService.addEmployee(employeeRequest2)
+                departmentId))
         clientService.addClient(clientRequest)
         clientService.addClient(clientRequest2)
-        carService.addCar(carRequest)
-        carService.addCar(carRequest2)
+        carService.addCar(new CarCreateRequest(
+                "Volvo",
+                "C70",
+                2012,
+                BigDecimal.valueOf(100L),
+                BodyType.CONVERTIBLE,
+                departmentId))
+        carService.addCar(new CarCreateRequest(
+                "Citroen",
+                "Berlingo",
+                2007,
+                BigDecimal.valueOf(110L),
+                BodyType.PANEL_VAN,
+                departmentId))
         def request = new RentCreateRequest(
                 clientService.getAllClients().first().getId(),
                 employeeService.findAllEmployees().first().getId(),
-                carService.getALlCars().first().getId(),
+                carService.getAllCars().first().getId(),
                 "xD")
         def request2 = new RentCreateRequest(
                 clientService.getAllClients().last().getId(),
                 employeeService.findAllEmployees().last().getId(),
-                carService.getALlCars().last().getId(),
+                carService.getAllCars().last().getId(),
                 "xDD")
         service.addRent(request)
         service.addRent(request2)
@@ -158,7 +169,7 @@ class RentServiceIntegrationSpec extends Specification {
         def rents = service.getALlRents()
 
         then:
-        rents !=null
+        rents != null
         rents.size() == 2
         with(rents.last()) {
             client.id == request2.clientId
@@ -174,22 +185,27 @@ class RentServiceIntegrationSpec extends Specification {
 
     def 'should update rent with given id'() {
         given:
-        clientService.addClient(clientRequest)
-        carService.addCar(carRequest)
         def departmentId = givenDepartmentExists(departmentRequest)
-        def employeeRequest = new EmployeeCreateRequest(
+        clientService.addClient(clientRequest)
+        carService.addCar(new CarCreateRequest(
+                "Chevrolet",
+                "Brookwood",
+                1958,
+                BigDecimal.valueOf(400),
+                BodyType.STATION_WAGON,
+                departmentId))
+        employeeService.addEmployee(new EmployeeCreateRequest(
                 "Karol",
                 "Eklerek",
-                departmentId)
-        employeeService.addEmployee(employeeRequest)
+                departmentId))
         def rent = new RentCreateRequest(
                 clientService.getAllClients().first().getId(),
                 employeeService.findAllEmployees().first().getId(),
-                carService.getALlCars().first().getId(),
+                carService.getAllCars().first().getId(),
                 "this is comment")
         def rentUpdate = new RentUpdateRequest(
                 LocalDate.now().plusDays(2L),
-                BigDecimal.valueOf(carRequest2.getPricePerDay()*2),
+                BigDecimal.valueOf(800),
                 "koniec imprezy",
                 RentStatus.FINISHED
         )
@@ -202,7 +218,7 @@ class RentServiceIntegrationSpec extends Specification {
         def updatedRent = service.getRentById(id)
 
         then:
-        with(updatedRent){
+        with(updatedRent) {
             startDate == LocalDate.now()
             returnDate == rentUpdate.returnDate
             charge == rentUpdate.charge
@@ -211,20 +227,25 @@ class RentServiceIntegrationSpec extends Specification {
         }
     }
 
-    def 'should remove rent with given id'(){
+    def 'should remove rent with given id'() {
         given:
-        clientService.addClient(clientRequest2)
-        carService.addCar(carRequest2)
         def departmentId = givenDepartmentExists(departmentRequest)
-        def employeeRequest = new EmployeeCreateRequest(
+        clientService.addClient(clientRequest2)
+        carService.addCar(new CarCreateRequest(
+                "Nash",
+                "Statesman",
+                1951,
+                BigDecimal.valueOf(500),
+                BodyType.SEDAN,
+                departmentId))
+        employeeService.addEmployee(new EmployeeCreateRequest(
                 "Karol",
                 "Eklerek",
-                departmentId)
-        employeeService.addEmployee(employeeRequest)
+                departmentId))
         def rent = new RentCreateRequest(
                 clientService.getAllClients().first().getId(),
                 employeeService.findAllEmployees().first().getId(),
-                carService.getALlCars().first().getId(),
+                carService.getAllCars().first().getId(),
                 "this is not comment")
         service.addRent(rent)
         def addedRent = repository.findAll().first()
@@ -253,12 +274,5 @@ class RentServiceIntegrationSpec extends Specification {
 
     private def givenDepartmentExists(DepartmentCreateRequest request) {
         return departmentService.addDepartment(request)
-    }
-
-    def cleanup() {
-        repository.deleteAll()
-        clientRepository.deleteAll()
-        employeeRepository.deleteAll()
-        carRepository.deleteAll()
     }
 }
