@@ -1,7 +1,10 @@
 package pl.sda.rentacar.domain.car;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import pl.sda.rentacar.domain.department.Department;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -9,10 +12,10 @@ import java.math.BigDecimal;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Table(name = "Cars")
-
 public class Car {
 
     @Id
@@ -25,5 +28,9 @@ public class Car {
     private BigDecimal pricePerDay;
     @Enumerated(value = EnumType.STRING)
     private BodyType bodyType;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id", nullable = false)
+    private Department department;
 }
 

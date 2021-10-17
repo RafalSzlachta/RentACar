@@ -34,10 +34,7 @@ public class EmployeeService {
     }
 
     public EmployeeView findEmployeeById(Long id) {
-        return employeeRepository
-                .findById(id)
-                .map(MAPPER::mapToEmployeeView)
-                .orElseThrow(() -> new EmployeeNotFoundException(id));
+        return MAPPER.mapToEmployeeView(getEmployeeById(id));
     }
 
     public Employee getEmployeeById(Long id) {
@@ -46,8 +43,11 @@ public class EmployeeService {
                 .orElseThrow(() -> new EmployeeNotFoundException(id));
     }
 
+    @Transactional
     public void deleteEmployeeById(Long id) {
-        employeeRepository.delete(getEmployeeById(id));
+        Employee employee = getEmployeeById(id);
+        employee.getDepartment().getEmployees().remove(employee);
+        employeeRepository.deleteById(id);
     }
 
     @Transactional

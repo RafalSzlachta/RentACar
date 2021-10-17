@@ -19,12 +19,12 @@ class DepartmentController {
     }
 
     @GetMapping("/{id}")
-    public DepartmentSingleView getClientById(@PathVariable Long id) {
+    public DepartmentSingleView getDepartmentById(@PathVariable Long id) {
         return service.getDepartmentById(id);
     }
 
     @GetMapping
-    public List<DepartmentListView> getALlClients() {
+    public List<DepartmentListView> getAllDepartments() {
         return service.getAllDepartments();
     }
 

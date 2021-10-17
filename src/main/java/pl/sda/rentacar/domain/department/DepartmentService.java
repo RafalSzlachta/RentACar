@@ -51,10 +51,4 @@ public class DepartmentService {
     public void removeDepartment(Long id) {
         repository.delete(findDepartmentById(id));
     }
-
-    public void addCar(Long departmentId, Car car) {
-        Department department = findDepartmentById(departmentId);
-        department.getCars().add(car);
-    }
-
 }

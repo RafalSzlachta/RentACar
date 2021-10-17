@@ -21,7 +21,7 @@ public class CarController {
 
     @GetMapping
     public List<CarView> getALlCars() {
-        return service.getALlCars();
+        return service.getAllCars();
     }
 
     @GetMapping("/{id")
