@@ -75,7 +75,7 @@ class ClientServiceIntegrationSpec extends Specification {
         service.addClient(secondClient)
 
         and:
-        def clients = service.getALlClients()
+        def clients = service.getAllClients()
 
         then:
         clients != null

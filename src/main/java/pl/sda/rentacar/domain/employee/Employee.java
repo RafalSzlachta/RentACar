@@ -1,10 +1,7 @@
 package pl.sda.rentacar.domain.employee;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import pl.sda.rentacar.domain.department.Department;
-
 import javax.persistence.*;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -12,7 +9,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+//@Data
+@Getter
+@Setter
+@EqualsAndHashCode
 @Table(name = "employees")
 public class Employee {
 
@@ -21,7 +21,6 @@ public class Employee {
     private Long id;
 
     private String firstName;
-
     private String lastName;
 
     @ManyToOne

@@ -24,7 +24,7 @@ public class CarService {
         departmentService.addCar(request.getDepartmentId(), car);
     }
 
-    List<CarView> getALlCars() {
+    public List<CarView> getAllCars() {
         return repository
             .findAll()
             .stream()
@@ -32,17 +32,17 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
-    CarView getCarById(Long id) {
+    public CarView getCarById(Long id) {
         return MAPPER.mapToCarView(findCarById(id));
     }
 
-    Car findCarById(Long id) {
+    public Car findCarById(Long id) {
         return repository
                 .findById(id)
                 .orElseThrow(() -> new CarNotFoundException(id));
     }
 
-    void updateCar(Long id, CarCreateRequest request) {
+    public void updateCar(Long id, CarCreateRequest request) {
         Car car = findCarById(id);
         car.setMake(request.getMake());
         car.setModel(request.getModel());
