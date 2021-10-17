@@ -3,6 +3,8 @@ package pl.sda.rentacar.domain.car
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
+import pl.sda.rentacar.domain.department.Department
+import pl.sda.rentacar.domain.department.DepartmentRepository
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -16,17 +18,31 @@ class CarServiceIntegrationSpec extends Specification{
     @Autowired
     private CarService service
 
+    @Autowired
+    private DepartmentRepository departmentRepository
+
+    @Shared
+    def department = new Department(
+            13L,
+            "Zimna Wodka",
+            [] as Set,
+            [] as Set
+    )
+
     @Shared
     def car = new CarCreateRequest(
             "Ford",
             "Focus",
             1324,
             BigDecimal.valueOf(100L),
-            BodyType.PICKUP
+            BodyType.PICKUP,
+            department.getId()
             )
+
     def 'should add car'(){
         given:
         cleanup()
+        departmentRepository.save(department)
         service.addCar(car)
 
         when:
@@ -40,6 +56,7 @@ class CarServiceIntegrationSpec extends Specification{
             productionYear == car.productionYear
             pricePerDay == car.pricePerDay
             bodyType == car.bodyType
+            departmentId == car.departmentId
         }
     }
 
